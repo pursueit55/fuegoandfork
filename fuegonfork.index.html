@@ -1,0 +1,1384 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fuego & Fork Bar and Grill — Anderson, SC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --fire:     #C0392B;
+      --fire-drk: #922B21;
+      --gold:     #D4AC0D;
+      --gold-lt:  #F4D03F;
+      --charcoal: #1A1A1A;
+      --dark:     #111111;
+      --cream:    #FDF6EC;
+      --warm:     #F5ECD7;
+      --text:     #2C1810;
+      --gray:     #7D6B5E;
+      --border:   #E8D5B7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--dark);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.35;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 76px;
+      background: rgba(17,17,17,0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212,172,13,0.2);
+      transition: all 0.3s;
+    }
+    nav.scrolled {
+      height: 64px;
+      border-bottom-color: rgba(192,57,43,0.3);
+      box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+    }
+
+    .nav-logo {
+      font-family: 'Abril Fatface', serif;
+      font-size: 1.5rem;
+      color: var(--cream);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+    .nav-logo .fork { color: var(--gold); }
+    .nav-logo .amp  { color: var(--fire); font-size: 1.2rem; }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: rgba(253,246,236,0.7);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-reserve {
+      background: var(--fire);
+      color: var(--cream) !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 3px;
+      transition: background 0.2s !important;
+    }
+    .nav-reserve:hover { background: var(--fire-drk) !important; color: var(--cream) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px; height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 5% 80px;
+      background: var(--dark);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(192,57,43,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 20% 50%, rgba(212,172,13,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 50%, rgba(212,172,13,0.08) 0%, transparent 60%);
+    }
+
+    .hero-flames {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 180px;
+      background: linear-gradient(to top, rgba(192,57,43,0.15), transparent);
+    }
+
+    .hero-divider-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 90px;
+      gap: 1rem;
+    }
+    .divider-line {
+      height: 1px;
+      width: 80px;
+      background: linear-gradient(to right, transparent, var(--gold));
+    }
+    .divider-line.right { background: linear-gradient(to left, transparent, var(--gold)); }
+    .divider-icon { color: var(--gold); font-size: 1rem; }
+
+    .hero-content { position: relative; max-width: 800px; }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .hero-title {
+      font-family: 'Abril Fatface', serif;
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      line-height: 0.95;
+      color: var(--cream);
+      margin-bottom: 0.3rem;
+      animation: fadeDown 0.8s 0.1s ease both;
+    }
+    .hero-title .fire-word { color: var(--fire); display: block; }
+    .hero-title .amp-sign  { color: var(--gold); font-size: 0.7em; }
+    .hero-title .fork-word { color: var(--cream); display: block; }
+
+    .hero-sub-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(0.95rem, 2vw, 1.2rem);
+      color: rgba(253,246,236,0.5);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      animation: fadeDown 0.8s 0.2s ease both;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: rgba(253,246,236,0.7);
+      line-height: 1.8;
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+      animation: fadeDown 0.8s 0.3s ease both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeDown 0.8s 0.4s ease both;
+    }
+
+    .btn-fire {
+      background: var(--fire);
+      color: var(--cream);
+      padding: 0.9rem 2.2rem;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-fire:hover { background: var(--fire-drk); transform: translateY(-2px); }
+
+    .btn-ghost {
+      border: 1px solid rgba(212,172,13,0.5);
+      color: var(--gold);
+      padding: 0.9rem 2.2rem;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--gold); background: rgba(212,172,13,0.08); }
+
+    .hero-features {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(212,172,13,0.15);
+      flex-wrap: wrap;
+      animation: fadeDown 0.8s 0.5s ease both;
+    }
+    .hero-feat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .feat-icon { font-size: 1.6rem; }
+    .feat-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(253,246,236,0.55);
+    }
+
+    /* ── GOLD DIVIDER ── */
+    .gold-divider {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 5%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .gold-divider::before, .gold-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+    .gold-divider span {
+      color: var(--gold);
+      font-size: 1.2rem;
+      white-space: nowrap;
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 90px 5%; }
+
+    .section-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'Abril Fatface', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      color: rgba(253,246,236,0.55);
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 540px;
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience {
+      background: var(--charcoal);
+    }
+
+    .exp-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(212,172,13,0.15);
+      border: 1px solid rgba(212,172,13,0.15);
+      border-radius: 8px;
+      overflow: hidden;
+      max-width: 1200px;
+      margin: 3.5rem auto 0;
+    }
+
+    .exp-card {
+      background: #1E1E1E;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .exp-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--fire);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .exp-card:hover { background: #252525; }
+    .exp-card:hover::after { transform: scaleX(1); }
+
+    .exp-icon { font-size: 2.2rem; margin-bottom: 1rem; display: block; }
+    .exp-name {
+      font-family: 'Abril Fatface', serif;
+      font-size: 1.25rem;
+      color: var(--cream);
+      margin-bottom: 0.6rem;
+    }
+    .exp-desc {
+      font-size: 0.88rem;
+      color: rgba(253,246,236,0.5);
+      line-height: 1.65;
+    }
+
+    /* ── MENU ── */
+    #menu {
+      background: var(--dark);
+    }
+
+    .menu-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 3.5rem;
+    }
+    .menu-header .section-sub { margin: 0 auto; }
+
+    .menu-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .tab-btn {
+      background: none;
+      border: 1px solid rgba(253,246,236,0.15);
+      color: rgba(253,246,236,0.5);
+      padding: 0.55rem 1.3rem;
+      border-radius: 3px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover, .tab-btn.active {
+      background: var(--fire);
+      border-color: var(--fire);
+      color: var(--cream);
+    }
+
+    .menu-panel { display: none; }
+    .menu-panel.active { display: block; }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      overflow: hidden;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .menu-item {
+      background: #191919;
+      padding: 1.3rem 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      transition: background 0.2s;
+    }
+    .menu-item:hover { background: #1f1f1f; }
+
+    .item-name {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.97rem;
+      color: var(--cream);
+      font-weight: 400;
+    }
+    .item-dots {
+      flex: 1;
+      border-bottom: 1px dotted rgba(253,246,236,0.15);
+      margin: 0 0.5rem;
+      align-self: center;
+    }
+    .item-price {
+      font-family: 'Abril Fatface', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    .menu-note {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: rgba(253,246,236,0.35);
+      font-style: italic;
+    }
+
+    /* ── BAR ── */
+    #bar {
+      background: var(--charcoal);
+      position: relative;
+      overflow: hidden;
+    }
+    #bar::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(192,57,43,0.12) 0%, transparent 70%);
+    }
+
+    .bar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .bar-visual {
+      background: linear-gradient(135deg, #1E1E1E 0%, #2A1510 100%);
+      border: 1px solid rgba(212,172,13,0.2);
+      border-radius: 8px;
+      aspect-ratio: 4/3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      font-size: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .bar-visual::after {
+      content: 'Full Bar Coming Soon';
+      position: absolute;
+      bottom: 1.2rem;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(212,172,13,0.4);
+    }
+
+    .bar-drinks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+    .drink-chip {
+      background: rgba(212,172,13,0.08);
+      border: 1px solid rgba(212,172,13,0.2);
+      border-radius: 4px;
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+      color: rgba(253,246,236,0.7);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* ── PARTY ROOM ── */
+    #events {
+      background: var(--dark);
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .events-visual {
+      background: linear-gradient(135deg, #1A1208 0%, #2C1810 100%);
+      border: 1px solid rgba(192,57,43,0.25);
+      border-radius: 8px;
+      padding: 3rem;
+      position: relative;
+    }
+    .events-big-icon { font-size: 4rem; display: block; margin-bottom: 1rem; }
+    .events-visual-title {
+      font-family: 'Abril Fatface', serif;
+      font-size: 1.8rem;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .events-visual-sub {
+      font-size: 0.9rem;
+      color: rgba(253,246,236,0.5);
+      line-height: 1.7;
+    }
+    .events-badge {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      background: var(--fire);
+      color: var(--cream);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.8rem;
+      border-radius: 3px;
+    }
+
+    .events-perks {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin: 2rem 0;
+    }
+    .events-perks li {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .perk-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .perk-text {}
+    .perk-title {
+      font-weight: 700;
+      font-size: 0.97rem;
+      color: var(--cream);
+      margin-bottom: 2px;
+    }
+    .perk-desc {
+      font-size: 0.85rem;
+      color: rgba(253,246,236,0.5);
+      line-height: 1.6;
+    }
+
+    /* ── MUSIC ── */
+    #music {
+      background: var(--charcoal);
+      text-align: center;
+      padding: 80px 5%;
+    }
+
+    .music-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .music-icon-big { font-size: 4rem; display: block; margin-bottom: 1.5rem; }
+
+    .music-nights {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 2.5rem 0;
+    }
+    .music-night {
+      background: #252525;
+      border: 1px solid rgba(212,172,13,0.2);
+      border-radius: 6px;
+      padding: 1.2rem 1.8rem;
+      min-width: 140px;
+    }
+    .night-day {
+      font-family: 'Abril Fatface', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .night-time {
+      font-size: 0.82rem;
+      color: rgba(253,246,236,0.45);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .night-type {
+      font-size: 0.78rem;
+      color: var(--fire);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.3rem;
+    }
+
+    /* ── HOURS & LOCATION ── */
+    #visit {
+      background: var(--dark);
+    }
+
+    .visit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    .hours-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
+    .hours-table tr {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .hours-table td {
+      padding: 0.85rem 0;
+      font-size: 0.95rem;
+    }
+    .hours-table td:first-child {
+      color: rgba(253,246,236,0.6);
+      font-weight: 600;
+    }
+    .hours-table td:last-child {
+      color: var(--gold);
+      text-align: right;
+      font-weight: 700;
+    }
+    .hours-table tr.today td { color: var(--cream) !important; }
+    .hours-table tr.today td:last-child { color: var(--gold-lt) !important; }
+
+    .location-info { margin-top: 2rem; }
+    .loc-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+      align-items: flex-start;
+    }
+    .loc-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .loc-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 3px;
+    }
+    .loc-value {
+      font-size: 0.97rem;
+      color: rgba(253,246,236,0.8);
+      line-height: 1.55;
+    }
+
+    .map-placeholder {
+      margin-top: 1.5rem;
+      background: #1A1A1A;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(253,246,236,0.2);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--charcoal);
+    }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    .contact-form {
+      background: #1A1A1A;
+      border: 1px solid rgba(212,172,13,0.15);
+      border-radius: 8px;
+      padding: 2.5rem;
+    }
+
+    .form-title {
+      font-family: 'Abril Fatface', serif;
+      font-size: 1.4rem;
+      color: var(--cream);
+      margin-bottom: 1.8rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(253,246,236,0.5);
+      margin-bottom: 0.4rem;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.75rem 1rem;
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      color: var(--cream);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--gold);
+    }
+    select option { background: #111; }
+    textarea { min-height: 110px; resize: vertical; }
+
+    .form-submit {
+      width: 100%;
+      background: var(--fire);
+      color: var(--cream);
+      border: none;
+      padding: 0.95rem;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .form-submit:hover { background: var(--fire-drk); transform: translateY(-1px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0A0A0A;
+      padding: 60px 5% 30px;
+      border-top: 1px solid rgba(212,172,13,0.12);
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr 1fr;
+      gap: 3rem;
+      max-width: 1100px;
+      margin: 0 auto 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-brand .nav-logo { display: block; font-size: 1.6rem; margin-bottom: 1rem; }
+    .footer-tagline {
+      font-size: 0.9rem;
+      color: rgba(253,246,236,0.35);
+      line-height: 1.75;
+      max-width: 260px;
+      font-style: italic;
+      font-family: 'Libre Baskerville', serif;
+    }
+
+    .footer-col-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .footer-links a {
+      color: rgba(253,246,236,0.45);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--cream); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-copy {
+      font-size: 0.82rem;
+      color: rgba(253,246,236,0.25);
+    }
+    .footer-city {
+      font-size: 0.82rem;
+      color: rgba(253,246,236,0.25);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 76px; left: 0; right: 0;
+        background: #111;
+        padding: 1.5rem 5%;
+        gap: 1.2rem;
+        border-top: 1px solid rgba(212,172,13,0.15);
+      }
+      .hamburger { display: flex; }
+      .exp-grid { grid-template-columns: 1fr 1fr; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .bar-grid, .events-grid, .visit-grid, .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 560px) {
+      section { padding: 65px 5%; }
+      .exp-grid { grid-template-columns: 1fr; }
+      .bar-drinks { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a class="nav-logo" href="#hero">Fuego <span class="amp">&</span> <span class="fork">Fork</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#experience">About</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#bar">Bar</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#music">Music</a></li>
+      <li><a href="#visit">Hours</a></li>
+      <li><a href="#contact" class="nav-reserve">Reserve a Table</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-flames"></div>
+    <div class="hero-divider-top">
+      <div class="divider-line"></div>
+      <span class="divider-icon">🔥</span>
+      <div class="divider-line right"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Now Open in Anderson, South Carolina</div>
+      <h1 class="hero-title">
+        <span class="fire-word">Fuego</span>
+        <span class="amp-sign">&</span>
+        <span class="fork-word">Fork</span>
+      </h1>
+      <div class="hero-sub-title">Bar &amp; Grill · Anderson, SC</div>
+      <p class="hero-desc">
+        Bold flavors, cold drinks, and a whole lot of good times. Anderson's newest restaurant and bar is open for business — come experience it for yourself.
+      </p>
+      <div class="hero-buttons">
+        <a href="#menu" class="btn-fire">See Our Menu</a>
+        <a href="#contact" class="btn-ghost">Reserve a Table</a>
+      </div>
+      <div class="hero-features">
+        <div class="hero-feat">
+          <span class="feat-icon">🍽️</span>
+          <span class="feat-label">Dine In</span>
+        </div>
+        <div class="hero-feat">
+          <span class="feat-icon">🍹</span>
+          <span class="feat-label">Full Bar</span>
+        </div>
+        <div class="hero-feat">
+          <span class="feat-icon">🎉</span>
+          <span class="feat-label">Party Room</span>
+        </div>
+        <div class="hero-feat">
+          <span class="feat-icon">🎵</span>
+          <span class="feat-label">Live Music</span>
+        </div>
+        <div class="hero-feat">
+          <span class="feat-icon">👨‍🍳</span>
+          <span class="feat-label">Full Kitchen</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="reveal" style="text-align:center; max-width:600px; margin:0 auto 0;">
+      <div class="section-tag">The Experience</div>
+      <h2 class="section-title">More Than Just a Meal</h2>
+      <p class="section-sub" style="margin:0 auto;">Anderson's newest hotspot brings bold food, handcrafted drinks, live entertainment, and private event space all under one roof.</p>
+    </div>
+    <div class="exp-grid reveal" style="margin-top:3.5rem;">
+      <div class="exp-card">
+        <span class="exp-icon">🍽️</span>
+        <div class="exp-name">Dine In</div>
+        <p class="exp-desc">Comfortable table seating in a vibrant atmosphere. Perfect for date night, family dinner, or just a great meal out.</p>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🍹</span>
+        <div class="exp-name">Full Bar</div>
+        <p class="exp-desc">Craft cocktails, cold beer, fine spirits, and more. Our bar is stocked and ready to keep the good times flowing.</p>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🎉</span>
+        <div class="exp-name">Party Room</div>
+        <p class="exp-desc">Private event space for birthdays, celebrations, corporate gatherings, and any occasion worth celebrating right.</p>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🎵</span>
+        <div class="exp-name">Live Music</div>
+        <p class="exp-desc">Live entertainment on select nights. Great food tastes even better with great music setting the mood.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu">
+    <div class="menu-header reveal">
+      <div class="section-tag">What We're Serving</div>
+      <h2 class="section-title">The Menu</h2>
+      <p class="section-sub">From sizzling fajitas to a classic cheeseburger — something for everyone, made fresh in our full kitchen.</p>
+      <p style="font-size:0.8rem; color:var(--fire); margin-top:0.6rem; font-style:italic;">* Menu subject to change as we settle into our new home</p>
+    </div>
+
+    <div class="menu-tabs reveal">
+      <button class="tab-btn active" onclick="showTab('mains')">Mains</button>
+      <button class="tab-btn" onclick="showTab('mexican')">Mexican Favorites</button>
+      <button class="tab-btn" onclick="showTab('american')">American Classics</button>
+      <button class="tab-btn" onclick="showTab('sides')">Sides & Extras</button>
+      <button class="tab-btn" onclick="showTab('drinks')">Drinks</button>
+    </div>
+
+    <div id="mains" class="menu-panel active reveal">
+      <div class="menu-grid">
+        <div class="menu-item"><span class="item-name">Fajitas</span><span class="item-dots"></span><span class="item-price">$12.99</span></div>
+        <div class="menu-item"><span class="item-name">Steak Picado</span><span class="item-dots"></span><span class="item-price">$12.99</span></div>
+        <div class="menu-item"><span class="item-name">Fajita Nachos</span><span class="item-dots"></span><span class="item-price">$12.99</span></div>
+        <div class="menu-item"><span class="item-name">Steak Fries</span><span class="item-dots"></span><span class="item-price">$12.99</span></div>
+        <div class="menu-item"><span class="item-name">Burrito — Steak or Grilled Chicken</span><span class="item-dots"></span><span class="item-price">$10.00</span></div>
+        <div class="menu-item"><span class="item-name">Chimichanga</span><span class="item-dots"></span><span class="item-price">$10.00</span></div>
+        <div class="menu-item"><span class="item-name">Philly Steak</span><span class="item-dots"></span><span class="item-price">$9.99</span></div>
+        <div class="menu-item"><span class="item-name">Cheeseburger</span><span class="item-dots"></span><span class="item-price">$9.99</span></div>
+      </div>
+    </div>
+
+    <div id="mexican" class="menu-panel reveal">
+      <div class="menu-grid">
+        <div class="menu-item"><span class="item-name">Enchiladas</span><span class="item-dots"></span><span class="item-price">$9.00</span></div>
+        <div class="menu-item"><span class="item-name">Quesadillas</span><span class="item-dots"></span><span class="item-price">$8.95</span></div>
+        <div class="menu-item"><span class="item-name">Nachos</span><span class="item-dots"></span><span class="item-price">$9.50</span></div>
+        <div class="menu-item"><span class="item-name">Pupusas</span><span class="item-dots"></span><span class="item-price">$2.50</span></div>
+        <div class="menu-item"><span class="item-name">Taquitos Tostadas</span><span class="item-dots"></span><span class="item-price">$6.99</span></div>
+        <div class="menu-item"><span class="item-name">Taco Salad</span><span class="item-dots"></span><span class="item-price">$9.50</span></div>
+        <div class="menu-item"><span class="item-name">Butter Salad</span><span class="item-dots"></span><span class="item-price">$12.99</span></div>
+        <div class="menu-item"><span class="item-name">Queso Dip</span><span class="item-dots"></span><span class="item-price">$5.75</span></div>
+      </div>
+    </div>
+
+    <div id="american" class="menu-panel reveal">
+      <div class="menu-grid">
+        <div class="menu-item"><span class="item-name">Cheeseburger</span><span class="item-dots"></span><span class="item-price">$9.99</span></div>
+        <div class="menu-item"><span class="item-name">Philly Steak</span><span class="item-dots"></span><span class="item-price">$9.99</span></div>
+        <div class="menu-item"><span class="item-name">Hot Dog Plate</span><span class="item-dots"></span><span class="item-price">$8.00</span></div>
+        <div class="menu-item"><span class="item-name">Hot Dog</span><span class="item-dots"></span><span class="item-price">$2.50</span></div>
+        <div class="menu-item"><span class="item-name">Steak Fries</span><span class="item-dots"></span><span class="item-price">$12.99</span></div>
+        <div class="menu-item"><span class="item-name">Regular Fries</span><span class="item-dots"></span><span class="item-price">$2.50</span></div>
+      </div>
+    </div>
+
+    <div id="sides" class="menu-panel reveal">
+      <div class="menu-grid">
+        <div class="menu-item"><span class="item-name">Regular Fries</span><span class="item-dots"></span><span class="item-price">$2.50</span></div>
+        <div class="menu-item"><span class="item-name">Rice</span><span class="item-dots"></span><span class="item-price">$2.50</span></div>
+        <div class="menu-item"><span class="item-name">Beans</span><span class="item-dots"></span><span class="item-price">$2.50</span></div>
+        <div class="menu-item"><span class="item-name">Chips &amp; Salsa</span><span class="item-dots"></span><span class="item-price">$3.50</span></div>
+        <div class="menu-item"><span class="item-name">Queso Dip</span><span class="item-dots"></span><span class="item-price">$5.75</span></div>
+        <div class="menu-item"><span class="item-name">Pupusas</span><span class="item-dots"></span><span class="item-price">$2.50</span></div>
+      </div>
+    </div>
+
+    <div id="drinks" class="menu-panel reveal">
+      <div class="menu-grid">
+        <div class="menu-item"><span class="item-name">Can Drinks</span><span class="item-dots"></span><span class="item-price">$1.25</span></div>
+        <div class="menu-item"><span class="item-name">Bottled Drinks</span><span class="item-dots"></span><span class="item-price">$2.50</span></div>
+        <div class="menu-item"><span class="item-name">Bottled Water</span><span class="item-dots"></span><span class="item-price">$1.25</span></div>
+        <div class="menu-item"><span class="item-name">Bar Drinks</span><span class="item-dots"></span><span class="item-price">See Bar</span></div>
+      </div>
+    </div>
+
+    <p class="menu-note">Menu prices and items subject to change. Ask your server about daily specials.</p>
+  </section>
+
+  <!-- BAR -->
+  <section id="bar">
+    <div class="bar-grid">
+      <div class="bar-visual reveal">
+        <span style="font-size:4rem;">🍹</span>
+        <span style="font-size:3rem; margin-top:-1rem;">🥃</span>
+      </div>
+      <div class="reveal">
+        <div class="section-tag">The Bar</div>
+        <h2 class="section-title">Drinks Done Right</h2>
+        <p class="section-sub">Our full bar is stocked and ready. Whether you're winding down after work or celebrating something special, we've got the right drink for the moment.</p>
+        <div class="bar-drinks">
+          <div class="drink-chip">🍺 Draft Beer</div>
+          <div class="drink-chip">🍷 Wine</div>
+          <div class="drink-chip">🥃 Spirits</div>
+          <div class="drink-chip">🍹 Cocktails</div>
+          <div class="drink-chip">🧃 Soft Drinks</div>
+          <div class="drink-chip">💧 Water</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTY ROOM / EVENTS -->
+  <section id="events">
+    <div class="events-grid">
+      <div class="reveal">
+        <div class="section-tag">Private Events</div>
+        <h2 class="section-title">Book Our Party Room</h2>
+        <p class="section-sub">Have something worth celebrating? Our private party room is available for any occasion — big or small.</p>
+        <ul class="events-perks">
+          <li>
+            <span class="perk-icon">🎂</span>
+            <div class="perk-text">
+              <div class="perk-title">Birthday Parties</div>
+              <div class="perk-desc">Make it a night to remember. Private space, great food, full bar access.</div>
+            </div>
+          </li>
+          <li>
+            <span class="perk-icon">🎊</span>
+            <div class="perk-text">
+              <div class="perk-title">Quinceañeras & Celebrations</div>
+              <div class="perk-desc">Special occasions deserve a special setting. Let us host your most important moments.</div>
+            </div>
+          </li>
+          <li>
+            <span class="perk-icon">💼</span>
+            <div class="perk-text">
+              <div class="perk-title">Corporate Events</div>
+              <div class="perk-desc">Team dinners, company gatherings, and professional events done in style.</div>
+            </div>
+          </li>
+          <li>
+            <span class="perk-icon">🥳</span>
+            <div class="perk-text">
+              <div class="perk-title">Any Occasion</div>
+              <div class="perk-desc">If you've got a reason to celebrate, we've got the room for it. Call us to check availability.</div>
+            </div>
+          </li>
+        </ul>
+        <a href="#contact" class="btn-fire" style="display:inline-block; margin-top:0.5rem;">Inquire About the Party Room</a>
+      </div>
+      <div class="events-visual reveal">
+        <span class="events-big-icon">🎉</span>
+        <div class="events-visual-title">Private Party Room</div>
+        <p class="events-visual-sub">Available for private bookings. Contact us to check dates and availability for your event.</p>
+        <div class="events-badge">Now Booking</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE MUSIC -->
+  <section id="music">
+    <div class="music-inner reveal">
+      <span class="music-icon-big">🎵</span>
+      <div class="section-tag">Live Entertainment</div>
+      <h2 class="section-title">Live Music Nights</h2>
+      <p class="section-sub" style="margin:0 auto;">Great food and great music go together. Join us on select nights for live entertainment that keeps the energy up all night long.</p>
+      <div class="music-nights">
+        <div class="music-night">
+          <div class="night-day">Friday</div>
+          <div class="night-time">8pm – Close</div>
+          <div class="night-type">Live Music</div>
+        </div>
+        <div class="music-night">
+          <div class="night-day">Saturday</div>
+          <div class="night-time">8pm – Close</div>
+          <div class="night-type">Live Music</div>
+        </div>
+        <div class="music-night">
+          <div class="night-day">Sunday</div>
+          <div class="night-time">4pm – 8pm</div>
+          <div class="night-type">Happy Hour</div>
+        </div>
+      </div>
+      <p style="font-size:0.82rem; color:rgba(253,246,236,0.3); font-style:italic;">* Entertainment schedule subject to change. Follow us on social media for updates.</p>
+    </div>
+  </section>
+
+  <!-- HOURS & LOCATION -->
+  <section id="visit">
+    <div class="visit-grid">
+      <div class="reveal">
+        <div class="section-tag">When to Find Us</div>
+        <h2 class="section-title">Hours</h2>
+        <table class="hours-table">
+          <tr><td>Monday</td><td>11am – 9pm</td></tr>
+          <tr><td>Tuesday</td><td>11am – 9pm</td></tr>
+          <tr><td>Wednesday</td><td>11am – 9pm</td></tr>
+          <tr><td>Thursday</td><td>11am – 10pm</td></tr>
+          <tr><td>Friday</td><td>11am – 12am</td></tr>
+          <tr><td>Saturday</td><td>11am – 12am</td></tr>
+          <tr><td>Sunday</td><td>12pm – 8pm</td></tr>
+        </table>
+        <p style="font-size:0.8rem; color:rgba(253,246,236,0.3); margin-top:1rem; font-style:italic;">* Hours subject to change. Call ahead to confirm.</p>
+      </div>
+      <div class="reveal">
+        <div class="section-tag">Where to Find Us</div>
+        <h2 class="section-title">Location</h2>
+        <div class="location-info">
+          <div class="loc-item">
+            <span class="loc-icon">📍</span>
+            <div>
+              <div class="loc-label">Address</div>
+              <div class="loc-value">Anderson, South Carolina<br><span style="font-size:0.82rem; color:rgba(253,246,236,0.4);">(Full address coming soon)</span></div>
+            </div>
+          </div>
+          <div class="loc-item">
+            <span class="loc-icon">📞</span>
+            <div>
+              <div class="loc-label">Phone</div>
+              <div class="loc-value">(864) 000-0000</div>
+            </div>
+          </div>
+          <div class="loc-item">
+            <span class="loc-icon">✉️</span>
+            <div>
+              <div class="loc-label">Email</div>
+              <div class="loc-value">info@fuegoandfork.com</div>
+            </div>
+          </div>
+        </div>
+        <div class="map-placeholder">Map Coming Soon</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-wrap">
+      <div class="reveal">
+        <div class="section-tag">Get In Touch</div>
+        <h2 class="section-title">Reserve a Table or Book an Event</h2>
+        <p class="section-sub">Ready to come in? Have a big event to plan? Send us a message and we'll get back to you fast.</p>
+        <br>
+        <div class="loc-item" style="margin-bottom:1.2rem;">
+          <span class="loc-icon">📞</span>
+          <div>
+            <div class="loc-label">Call Us</div>
+            <div class="loc-value">(864) 000-0000</div>
+          </div>
+        </div>
+        <div class="loc-item">
+          <span class="loc-icon">✉️</span>
+          <div>
+            <div class="loc-label">Email</div>
+            <div class="loc-value">info@fuegoandfork.com</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form reveal">
+        <div class="form-title">Make a Reservation</div>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="First and last name"/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="(864) 000-0000"/>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="you@email.com"/>
+        </div>
+        <div class="form-group">
+          <label>What are you planning?</label>
+          <select>
+            <option value="">Choose one...</option>
+            <option>Dinner Reservation</option>
+            <option>Birthday Party</option>
+            <option>Corporate Event</option>
+            <option>Large Group Dining</option>
+            <option>Other Celebration</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Tell us about your group size, preferred date, or anything else we should know..."></textarea>
+        </div>
+        <button class="form-submit" id="submitBtn">Send Message 🔥</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="nav-logo" href="#hero">Fuego <span class="amp">&</span> <span class="fork">Fork</span></a>
+        <p class="footer-tagline">"Bold flavors, cold drinks, and a whole lot of good times — right here in Anderson."</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigate</div>
+        <ul class="footer-links">
+          <li><a href="#experience">About</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#bar">Bar</a></li>
+          <li><a href="#events">Party Room</a></li>
+          <li><a href="#music">Live Music</a></li>
+          <li><a href="#visit">Hours & Location</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-links">
+          <li><a href="tel:8640000000">(864) 000-0000</a></li>
+          <li><a href="mailto:info@fuegoandfork.com">info@fuegoandfork.com</a></li>
+          <li><a href="#visit">Anderson, SC</a></li>
+          <li><a href="#contact">Reserve a Table</a></li>
+          <li><a href="#contact">Book the Party Room</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Fuego & Fork Bar and Grill. All rights reserved.</p>
+      <p class="footer-city">Anderson, South Carolina 🔥</p>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Mobile menu
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+    // Menu tabs
+    function showTab(id) {
+      document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Form submit
+    document.getElementById('submitBtn').addEventListener('click', function() {
+      this.textContent = '✓ Message Sent!';
+      this.style.background = '#16a34a';
+      setTimeout(() => {
+        this.textContent = 'Send Message 🔥';
+        this.style.background = '';
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
+
+ 
